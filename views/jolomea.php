@@ -115,6 +115,11 @@ class JolomeaViewJolomea{
 						<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=importXliff">
 							XLIFF
 						</a>
+												
+						<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=importPO">
+							, PO
+						</a>
+												
 						<?php if (JoomlaCompatibilityHelper::isJoomla1_5()){ ?>
 							<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=importIni">
 								, INI
