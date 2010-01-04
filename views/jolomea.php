@@ -154,7 +154,10 @@ class JolomeaViewJolomea{
 			
 			var id =el.getParent().getParent().id;
 					
-			google.language.translate($(id).getElement("td.source").innerHTML, "en", "fr", function(result) {
+			var language_source_iso2 = $('language_source_iso2').innerHTML;
+			var language_target_iso2 = $('language_target_iso2').innerHTML;
+					
+			google.language.translate($(id).getElement("td.source").innerHTML, language_source_iso2, language_target_iso2, function(result) {
 				if (!result.error) {
 					var id =el.getParent().getParent().id;					
 					var container  = $(id).getElement("td.target").getElement('textarea');
@@ -188,6 +191,9 @@ class JolomeaViewJolomea{
 				</tbody>				
 			</table>		
 			<input type="hidden" name="translation_group" value="<?=JoomlaCompatibilityHelper::getRequestVar('translation_group', '')?>"/>
+
+			<span style="display:none" id="language_source_iso2"><?=LanguageHelper::getIso2(JoomlaCompatibilityHelper::getRequestVar("language_source"))?></span>
+			<span style="display:none" id="language_target_iso2"><?=LanguageHelper::getIso2(JoomlaCompatibilityHelper::getRequestVar("language_target"))?></span>
 			
 		<?
 	}

@@ -11,6 +11,7 @@ defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
 
 require_once 'helpers/JoomlaCompatibilityHelper.php';
 require_once 'helpers/XliffHelper.php';
+require_once 'helpers/LanguageHelper.php';
 require_once 'helpers/POHelper.php';
 require_once 'helpers/IniHelper.php';
 require_once 'helpers/handlerHelper.php';

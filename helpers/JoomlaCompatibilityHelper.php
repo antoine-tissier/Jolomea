@@ -63,7 +63,7 @@ class JoomlaCompatibilityHelper{
 		}
 	}
 	
-	public static function getRequestVar($param, $default){
+	public static function getRequestVar($param, $default=""){
 		if (self::isJoomla1_5()){
 			return JRequest::getVar($param,$default,$_REQUEST);
 		} else {
