@@ -28,22 +28,43 @@ class POHelper{
 		
 		$export =  'msgid ""'."\n";
 		$export .= 'msgstr ""'."\n";
-		$export .= '"Content-Type: text/plain; charset=UTF-8\n"'."\n\n";
-
+		$export .= '"MIME-Version: 1.0\n"'."\n";
+		$export .= '"Content-Transfer-Encoding: 8bit\n"'."\n";
+		$export .= '"Content-Type: text/plain; charset=UTF-8\n"'."\n\n";				
 		
 		foreach($array as $k=>$v){
-			$export.= 'msgctxt  "'  . TGettext::prepare($k, true) . '"' . "\n" ;
+			$export.= 'msgctxt "'  . TGettext::prepare($k, true) . '"' . "\n" ;
 			$export.= 'msgid "'  . TGettext::prepare($v['source'], true) . '"' . "\n" ;
             $export.= 'msgstr "' . TGettext::prepare($v['target'], true) . '"' . "\n\n";					
 		}
 		return $export;		
 	}
 
-	public static function import($string){
-		$array = array();
+	public static function import($contents){
+		$array = array();		
 	
+		 // match all msgctxt/msgid/msgstr entries
+        $matched = preg_match_all(
+			'/(msgctxt\s+("([^"]|\\\\")*?"\s*)+)\s+' .
+            '(msgid\s+("([^"]|\\\\")*?"\s*)+)\s+' .			
+            '(msgstr\s+("([^"]|\\\\")*?"\s*)+)/',
+            $contents, $matches
+        );		
+	
+		if (!$matched) {
+            return false;
+        }
+	
+		// get all msgids and msgtrs
+        for ($i = 0; $i < $matched; $i++) {					
+			$msgctxt = preg_replace(
+                '/\s*msgctxt\s*"(.*)"\s*/s', '\\1', $matches[1][$i]);													
+            $msgstr= preg_replace(
+                '/\s*msgstr\s*"(.*)"\s*/s', '\\1', $matches[7][$i]);
+            $array[TGettext::prepare($msgctxt)] = TGettext::prepare($msgstr);
+        }			
 		return $array;
-	}
+	}		
 }
 
 
