@@ -68,7 +68,7 @@ if (class_exists($handler)){
 	}
 	
 	
-	if (!in_array($task,array('importIni','importXliff','importPO'))){
+	if (!in_array($task,array('importIni','importXliff','importPo'))){
 		JolomeaViewJolomea::displayHeader(
 			$jolomea_translation_handler->getAvailableLanguagesSelect("language_source",$language_source, " onchange=\"$('idFormLanguage').submit()\" "),
 			$jolomea_translation_handler->getAvailableLanguagesSelect("language_target",$language_target, " onchange=\"$('idFormLanguage').submit()\" "),
@@ -165,7 +165,7 @@ if (class_exists($handler)){
 			break;
 		
 		case 'importIni':		
-		case 'importPO':		
+		case 'importPo':		
 		case 'importXliff':
 			$message = "";
 			
@@ -185,7 +185,7 @@ if (class_exists($handler)){
 						case 'importIni':
 							$translation_array = IniHelper::import(file_get_contents($tmp_file));
 							break;
-						case 'importPO':
+						case 'importPo':
 							$translation_array = POHelper::import(file_get_contents($tmp_file));
 							break;
 						case 'importXliff':
@@ -208,7 +208,7 @@ if (class_exists($handler)){
 				case 'importIni':
 					JolomeaViewJolomea::displayImportForm($jolomea_translation_handler->getAvailableLanguagesSelect("language_target",$language_target), $handler, $translation_group, $message, "ini");					
 					break;
-				case 'importPO':
+				case 'importPo':
 					JolomeaViewJolomea::displayImportForm($jolomea_translation_handler->getAvailableLanguagesSelect("language_target",$language_target), $handler, $translation_group, $message, "po");
 					break;
 					break;
