@@ -9,13 +9,10 @@
 // no direct access
 defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
 
-require_once "Gettext/TGettext.class.php";
 
 class POHelper{
 
 	public static function export($array_source,$array_target){
-			
-		$po = TGettext::factory('PO');
 		
 		$array = array();
 		
@@ -33,9 +30,9 @@ class POHelper{
 		$export .= '"Content-Type: text/plain; charset=UTF-8\n"'."\n\n";				
 		
 		foreach($array as $k=>$v){
-			$export.= 'msgctxt "'  . TGettext::prepare($k, true) . '"' . "\n" ;
-			$export.= 'msgid "'  . TGettext::prepare($v['source'], true) . '"' . "\n" ;
-            $export.= 'msgstr "' . TGettext::prepare($v['target'], true) . '"' . "\n\n";					
+			$export.= 'msgctxt "'  . self::prepare($k, true) . '"' . "\n" ;
+			$export.= 'msgid "'  . self::prepare($v['source'], true) . '"' . "\n" ;
+            $export.= 'msgstr "' . self::prepare($v['target'], true) . '"' . "\n\n";					
 		}
 		return $export;		
 	}
@@ -61,10 +58,30 @@ class POHelper{
                 '/\s*msgctxt\s*"(.*)"\s*/s', '\\1', $matches[1][$i]);													
             $msgstr= preg_replace(
                 '/\s*msgstr\s*"(.*)"\s*/s', '\\1', $matches[7][$i]);
-            $array[TGettext::prepare($msgctxt)] = TGettext::prepare($msgstr);
+            $array[self::prepare($msgctxt)] = self::prepare($msgstr);
         }			
 		return $array;
 	}		
+	
+	/**
+	  * Stolen from PEAR Gettext
+	  * Copyright (c) 2004 Michael Wallner <mike@iworks.at> 
+	  */
+	
+	public static function prepare($string, $reverse = false)
+    {
+        if ($reverse) {
+            $smap = array('"', "\n", "\t", "\r");
+            $rmap = array('\"', '\\n"' . "\n" . '"', '\\t', '\\r');
+            return (string) str_replace($smap, $rmap, $string);
+        } else {
+        	$string = preg_replace('/"\s+"/', '', $string);
+            $smap = array('\\n', '\\r', '\\t', '\"');
+            $rmap = array("\n", "\r", "\t", '"');
+            return (string) str_replace($smap, $rmap, $string);
+        }
+    }
+	
 }
 
 
