@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+	<name>Jolomea</name>
+	<creationDate>8.12.2009</creationDate>
+	<author>Libre d'esprit</author>
+	<authorEmail>jolomea@thinking-days.net</authorEmail>
+	<authorUrl>http://libre-d-esprit.thinking-days.net</authorUrl>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>0.0.1</version>
+	<description>JOomlea LOcalisation Made EAsy</description>
+
+	<administration>
+		<menu>Jolomea</menu>
+		<files>
+			<filename>admin.jolomea.php</filename>
+			<filename>toolbar.jolomea.php</filename>
+			<filename>toolbar.jolomea.html.php</filename>
+			<filename>handlers/jolomeaIniJoomla.php</filename>
+			<filename>handlers/jolomeaDefineJoomla.php</filename>
+			<filename>handlers/jolomeaClassVirtuemart.php</filename>
+			<filename>handlers/jolomeaJoomfish.php</filename>
+			<filename>helpers/handlerHelper.php</filename>
+			<filename>helpers/IniHelper.php</filename>
+			<filename>helpers/JoomlaCompatibilityHelper.php</filename>
+			<filename>helpers/XliffHelper.php</filename>
+			<filename>helpers/LanguageHelper.php</filename>
+			<filename>helpers/POHelper.php</filename>
+			<filename>views/jolomea.php</filename>
+		</files>
+	</administration>
+</install>
