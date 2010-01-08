@@ -24,6 +24,8 @@ if (!defined('_JEXEC')){
 	$defaultHandlerName = 'jolomeaDefineJoomla';
 }
 
+$handlers = array();
+
 $handler = JoomlaCompatibilityHelper::getRequestCmd('handler',$defaultHandlerName);
 
 $language_source =  JoomlaCompatibilityHelper::getRequestCmd('language_source');
@@ -43,12 +45,21 @@ if ($handle=opendir(dirname(__FILE__).'/handlers'))
 			{
 				require_once dirname(__FILE__).'/handlers/'.$file;
 				if (class_exists(basename($file,'.php'))){
-					eval( basename($file,'.php')."::displayEntryMenu();");				
+					$_handlers =  eval( "return ".basename($file,'.php')."::displayEntryMenu();");					
+															
+					if (is_array($_handlers)){
+						
+						foreach( $_handlers as $_h){
+							$handlers [] = 	$_h;
+						}					
+					}
 				}				
 			}
 		}
 	}
 }	
+
+
 
 JoomlaCompatibilityHelper::displaySubMenu();
 
@@ -80,6 +91,23 @@ if (class_exists($handler)){
 	
 	
 	switch($task){
+	
+		case "search":
+			$keyword =  JoomlaCompatibilityHelper::getRequestCmd('keyword');		
+
+			$results = array();
+			
+			foreach($handlers as $s_handler){				
+				if (class_exists($s_handler)){														
+					$_handler = eval ("return  new $s_handler();");				
+					if (method_exists($_handler,'search')){
+						$results[$s_handler] = $_handler->search($keyword, $language_target);
+					}				
+				}
+			}			
+			JolomeaViewJolomea::search($keyword, $language_source, $language_target, $results);		
+			break;		
+	
 		case "saveTranslationFile":
 			$language_source =  JoomlaCompatibilityHelper::getRequestCmd('language_source');
 			$language_target =  JoomlaCompatibilityHelper::getRequestCmd('language_target');

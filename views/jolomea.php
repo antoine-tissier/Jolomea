@@ -11,6 +11,47 @@ defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
 
 class JolomeaViewJolomea{
 
+	function search($keyword, $language_source, $language_target, $results=array()){
+	?>
+		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" >		
+			<input type="text" name="keyword" value="<?=$keyword?>"/>
+			<input type="hidden" name="task" value="search"/>
+			<input type="submit"/>
+		</form>
+		
+		<?php if(!empty($results)){ ?>
+		
+		<table class="adminlist">					
+		
+			<thead>				
+				<th>Handler</th>
+				<th>Group</th>
+				<th>Key</th>
+				<th>Text</th>
+			</thead>
+		
+			<?php foreach($results as $handler=>$result_h){ ?>
+				<?php foreach( $result_h as $result ) {
+				
+				$link = "index2.php?option=com_jolomea&hander=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$language_source."&language_target=".$language_target;
+				
+				?>			
+				<tr>					
+					<td><a href="<?=$link?>"><?=$result['handler']?></a></td>
+					<td><a href="<?=$link?>"><?=$result['group']?></a></td>
+					<td><a href="<?=$link?>"><?=$result['key']?></a></td>
+					<td><a href="<?=$link?>"><?=htmlentities($result['text'],ENT_COMPAT,'UTF-8')?></a></td>
+				</tr>
+			<?php } ?>
+			<?php } ?>
+		
+		</table>
+		
+		<?php } ?>
+		
+	<?php
+	}
+
 	function displayImportForm($availableLanguagesTargetSelect, $handler, $translation_group, $message="", $format="ini"){
 	?>
 		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">		
