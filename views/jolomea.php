@@ -33,7 +33,7 @@ class JolomeaViewJolomea{
 			<?php foreach($results as $handler=>$result_h){ ?>
 				<?php foreach( $result_h as $result ) {
 				
-				$link = "index2.php?option=com_jolomea&hander=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$language_source."&language_target=".$language_target;
+				$link = "index2.php?option=com_jolomea&handler=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$language_source."&language_target=".$language_target;
 				
 				?>			
 				<tr>					

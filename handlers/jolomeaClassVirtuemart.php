@@ -15,6 +15,54 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 		if (file_exists(JoomlaCompatibilityHelper::getJoomlaRoot()."/administrator/components/com_virtuemart/languages/")){
 			JoomlaCompatibilityHelper::addEntrySubMenu(JoomlaCompatibilityHelper::__('Virtuemart'), 'index'.(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"").'.php?option=com_jolomea&handler=jolomeaClassVirtuemart',$handler=='jolomeaClassVirtuemart');
 		}
+		return array('jolomeaClassVirtuemart');
+	}
+
+	public function getHandlerName() {
+		return 'jolomeaClassVirtuemart';
+	}
+	
+	public function getFilenameToTranslationGroup($file,$language){		
+		$s_filename = substr($file, 0, strlen($file)-(strlen($language)+5) );
+				
+		return basename($s_filename);
+	}
+	
+
+	public function search($keyword, $language){		
+		$search = array();
+		if (!empty($keyword)){			
+			$groups = $this->getAvailableTranslationData($language);
+			
+			foreach($groups as $group) {
+				$filename = $group[$language];
+				
+				if (is_file($filename)){					
+					$content = file_get_contents($filename);
+					
+					if (false<>mb_strpos($content,$keyword, 0, 'UTF8')){				
+					
+						$translation_array = $this->getTranslationFileToArray($filename);
+					
+						foreach($translation_array  as $k=>$t){													
+							if (is_string($t)&&(!empty($t))){
+						
+								if (false <> mb_strpos($t,$keyword, 0, 'UTF8')){
+									$search_r = array();
+									$search_r['group'] = $this->getFilenameToTranslationGroup($filename,$language);
+									$search_r['handler'] = $this->getHandlerName();
+									$search_r['key'] = $k;
+									$search_r['language'] =$language;
+									$search_r['text'] =$t;
+									$search[] = $search_r;
+								}
+							}										
+						}
+					}
+				}
+			}
+		}
+		return $search;
 	}
 	
 	public function getFilePath(){	
@@ -129,7 +177,7 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 	}
 	
 	public function getAvailableTranslationDataForGroup($language,$key){
-		return $this->getFilePath()."/".$key."/".$language.".".$key.".php";
+		return $this->getFilePath()."/".$key."/".$language.".php";
 	}
 	
 	public function getAvailableTranslationData($language){
