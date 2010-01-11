@@ -160,7 +160,7 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 		}
 			
 		$languages = array();
-		if ($handle=opendir($path))
+		if ($handle=@opendir($path))
 		{		
 			while (false!==($file=readdir($handle)))
 			{	  
@@ -186,7 +186,7 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 		
 		$languages = $this->getAvailableLanguages();
 		
-		if ($handle=opendir($path))
+		if ($handle=@opendir($path))
 		{		
 			while (false!==($file=readdir($handle)))
 			{	  

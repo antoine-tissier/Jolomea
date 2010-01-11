@@ -45,14 +45,19 @@ class jolomeaJoomfish extends jolomeaHandler{
 			$database					=& JFactory::getDBO();
 			$keyword = '%'.$keyword.'%';
 			$database->setQuery('SELECT * from #__jf_content where `value`like'.$database->Quote($keyword));
-			foreach ($database->loadObjectList() as $r){
-				$search_r = array();
-				$search_r['group'] = $r->reference_table;
-				$search_r['handler'] = $this->getHandlerName();
-				$search_r['key'] = $r->reference_id.'_'.$r->reference_field;
-				$search_r['language'] =$r->language_id;
-				$search_r['text'] =$t;
-				$search[] = $search_r;
+			
+			$list = $database->loadObjectList();
+			
+			if (is_array($list)){
+				foreach ($database->loadObjectList() as $r){
+					$search_r = array();
+					$search_r['group'] = $r->reference_table;
+					$search_r['handler'] = $this->getHandlerName();
+					$search_r['key'] = $r->reference_id.'_'.$r->reference_field;
+					$search_r['language'] =$r->language_id;
+					$search_r['text'] =$t;
+					$search[] = $search_r;
+				}
 			}
 		}
 		return $search;
