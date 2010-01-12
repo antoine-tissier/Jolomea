@@ -30,23 +30,32 @@ class jolomeaJoomfish extends jolomeaHandler{
 	public function index(){
 		$database					=& JFactory::getDBO();
 		$database->setQuery("SHOW INDEX FROM #__jf_content WHERE key_name='value_full_text'");
-		if (!$database->loadObject($index)){
+		if (!$database->loadResult()){
 			$database->setQuery('ALTER TABLE `#__jf_content` ADD FULLTEXT `value_full_text` (`value`);');
 			$database->query();
 		}		
 	}
 	
-	public function search($keyword, $language){		
+	public function search($keyword, $language_target, $language_source){		
 		$search = array();
 		$search_r = array();
 		
 		if (!empty($keyword)){			
 			$this->index();
 			$database					=& JFactory::getDBO();
+			
+			$database->setQuery('SELECT id from #__languages where shortcode='.$database->Quote($language_source));			
+			$language_source=$database->loadResult();
+		
+			$database->setQuery('SELECT id from #__languages where shortcode='.$database->Quote($language_target));
+			$language_target=$database->loadResult();
+						
 			$keyword = '%'.$keyword.'%';
-			$database->setQuery('SELECT * from #__jf_content where `value`like'.$database->Quote($keyword));
+			$database->setQuery('SELECT * from #__jf_content where `value` like'.$database->Quote($keyword).' and language_id='.$language_target);
 			
 			$list = $database->loadObjectList();
+			
+			
 			
 			if (is_array($list)){
 				foreach ($database->loadObjectList() as $r){
@@ -55,7 +64,8 @@ class jolomeaJoomfish extends jolomeaHandler{
 					$search_r['handler'] = $this->getHandlerName();
 					$search_r['key'] = $r->reference_id.'_'.$r->reference_field;
 					$search_r['language'] =$r->language_id;
-					$search_r['text'] =$t;
+					$search_r['language_source'] = "";
+					$search_r['text'] =$r->value;
 					$search[] = $search_r;
 				}
 			}

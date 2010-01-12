@@ -93,10 +93,11 @@ if (class_exists($handler)){
 	switch($task){
 	
 		case "search":
-		
+			
 			$language_source = LanguageHelper::getIso2($language_source);
+			
 			$language_target = LanguageHelper::getIso2($language_target);
-		
+			
 			$keyword =  JoomlaCompatibilityHelper::getRequestCmd('keyword');		
 
 			$results = array();
