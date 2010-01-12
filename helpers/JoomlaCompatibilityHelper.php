@@ -65,7 +65,7 @@ class JoomlaCompatibilityHelper{
 	
 	public static function getRequestVar($param, $default=""){
 		if (self::isJoomla1_5()){
-			return JRequest::getVar($param,$default,$_REQUEST);
+			return JRequest::getVar($param,$default,'default');
 		} else {
 			//TODO : securite
 			return mosGetParam($_REQUEST,$param,$default);
@@ -75,7 +75,7 @@ class JoomlaCompatibilityHelper{
 	public static function getRequestCmd($param,$default=""){
 	
 		if (self::isJoomla1_5()){
-			return JRequest::getCmd($param,$default,$_REQUEST);
+			return JRequest::getCmd($param,$default,'default');
 		} else {
 			//TODO : securite
 			return mosGetParam($_REQUEST,$param,$default);
