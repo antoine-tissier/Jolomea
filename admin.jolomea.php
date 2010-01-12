@@ -79,7 +79,7 @@ if (class_exists($handler)){
 	}
 	
 	
-	if (!in_array($task,array('importIni','importXliff','importPo'))){
+	if (!in_array($task,array('importIni','importXliff','importPo','search'))){
 		JolomeaViewJolomea::displayHeader(
 			$jolomea_translation_handler->getAvailableLanguagesSelect("language_source",$language_source, " onchange=\"$('idFormLanguage').submit()\" "),
 			$jolomea_translation_handler->getAvailableLanguagesSelect("language_target",$language_target, " onchange=\"$('idFormLanguage').submit()\" "),
@@ -93,19 +93,42 @@ if (class_exists($handler)){
 	switch($task){
 	
 		case "search":
+		
+			$language_source = LanguageHelper::getIso2($language_source);
+			$language_target = LanguageHelper::getIso2($language_target);
+		
 			$keyword =  JoomlaCompatibilityHelper::getRequestCmd('keyword');		
 
 			$results = array();
+			$language_search = array();
 			
 			foreach($handlers as $s_handler){				
 				if (class_exists($s_handler)){														
 					$_handler = eval ("return  new $s_handler();");				
-					if (method_exists($_handler,'search')){
-						$results[$s_handler] = $_handler->search($keyword, $language_target);
+					if (method_exists($_handler,'search')){						
+						$results[$s_handler] = $_handler->search($keyword, $language_target, $language_source);
+						$language_search[$s_handler] = 	$_handler->getAvailableLanguages();						
 					}				
 				}
-			}			
-			JolomeaViewJolomea::search($keyword, $language_source, $language_target, $results);		
+			}						
+			
+			$iso2_availables = array();
+			
+			foreach($language_search as $s_handler_languages){				
+			
+				foreach($s_handler_languages as $s_handler_language){
+					$iso2 = LanguageHelper::getIso2($s_handler_language);
+					$iso2_availables[$iso2] = $iso2;
+				}							
+			}						
+					
+			JolomeaViewJolomea::search(
+				$keyword, 
+				$language_source, 
+				$language_target,  
+				JolomeaViewJolomea::languageSelect("language_target", " onchange=\"$('idFormLanguage').submit()\" ", $language_target, 
+				$iso2_availables),
+				$results);		
 			break;		
 	
 		case "saveTranslationFile":

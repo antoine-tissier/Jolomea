@@ -127,8 +127,12 @@ class jolomeaJoomfish extends jolomeaHandler{
 		$getAvailableLanguages = array();
 		$database->setQuery('SELECT id, code from #__languages');
 	
-		foreach ($database->loadObjectList('id') as $k=>$v){
-			$getAvailableLanguages[]=$v->code;
+		$list = $database->loadObjectList('id');
+	
+		if (is_array($list)){	
+			foreach ($database->loadObjectList('id') as $k=>$v){
+				$getAvailableLanguages[]=$v->code;
+			}
 		}
 	
 		return $getAvailableLanguages;

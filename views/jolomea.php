@@ -11,12 +11,36 @@ defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
 
 class JolomeaViewJolomea{
 
-	function search($keyword, $language_source, $language_target, $results=array()){
+	function languageSelect($name, $attribs, $selected, $langs){			
+		$languageSelect = "<select name='".$name."' ".$attribs.">";
+		foreach($langs as $lang) { 
+			$languageSelect .= "<option ".($selected==$lang?" selected='selected' ":" ").">".$lang."</option>";
+		 }
+		$languageSelect .="</select>";
+		return	$languageSelect;
+	}
+
+	function search($keyword, $language_source, $language_target, $language_select, $results=array()){		
+	
 	?>
-		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" >		
-			<input type="text" name="keyword" value="<?=$keyword?>"/>
+		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">					
 			<input type="hidden" name="task" value="search"/>
-			<input type="submit"/>
+		
+			<table style="width:30%">
+				<tr>
+					<td nowrap="nowrap">					
+					<?=JoomlaCompatibilityHelper::__('Target language')?>:  <?=$language_select?>
+					<input type="hidden" name="language_source" value="<?=$language_source?>"/>
+					</td>
+					<td nowrap="nowrap">					
+					<?=JoomlaCompatibilityHelper::__('Keyword')?>:  <input type="text" name="keyword" value="<?=$keyword?>"/>
+					</td>
+					<td nowrap="nowrap">					
+						<input type="submit"/>
+					</td>
+				</tr>
+			</table>			
+			
 		</form>
 		
 		<?php if(!empty($results)){ ?>
@@ -33,7 +57,7 @@ class JolomeaViewJolomea{
 			<?php foreach($results as $handler=>$result_h){ ?>
 				<?php foreach( $result_h as $result ) {
 				
-				$link = "index2.php?option=com_jolomea&handler=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$language_source."&language_target=".$language_target."#row_".$result['key'];
+				$link = "index2.php?option=com_jolomea&handler=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$result['language_source']."&language_target=".$result['language']."#row_".$result['key'];
 				
 				?>			
 				<tr>					
@@ -99,6 +123,17 @@ class JolomeaViewJolomea{
 	function displayFooter(){
 		?>
 		</form>
+		
+		<p style="text-align:right;font-style:italic">
+			<a href="http://jolomea.thinking-days.net" target="_blank">
+				Jolomea
+			</a>
+			is developped and maintained by 
+			<a href="http://libre-d-esprit.thinking-days.net" target="_blank">
+				Libre d'esprit
+			</a>
+		</p>
+		
 		<?
 	}
 	
