@@ -134,7 +134,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 		}
 
 		//Whatever it is the default language, we should check if the results are overrided by Joomfish		
-		$database->setQuery("SELECT #__jf_content.* from #__jf_content inner join #__languages on #__languages.id = #__jf_content.language_id where reference_table=".$database->Quote($file)." and code=".$database->Quote($language));
+		$database->setQuery("SELECT #__jf_content.* from #__jf_content inner join #__languages on #__languages.id = #__jf_content.language_id where reference_table=".$database->Quote($file)." and code=".$database->Quote($language)." and published=1");
 		
 		$results =$database->loadObjectList();
 		
@@ -147,7 +147,66 @@ class jolomeaJoomfish extends jolomeaHandler{
 		return $getTranslationFileToArray;
 	}
 	
-	public  function getArrayToTranslationFile($array,$language,$group){		
+	/**
+	  * Save of the translation in the database
+	  */	
+	public  function getArrayToTranslationFile($array,$language,$reference_table){		
+		
+		$user =& JFactory::getUser();				
+		
+		$database					=& JFactory::getDBO();
+		
+		$language_id='';
+				
+		
+		$modified=time();
+		$modified_by='';
+		
+		//fr-FR
+		//categories
+		
+		$non_empty_keys = array();
+		$non_empty_ids = array();		
+		
+		foreach ($array as $key=>$value){		
+			if (!empty($value)){			
+				$non_empty_keys [$key] = $key;										
+				$non_empty_ids[intval($key)]	= intval($key);			
+			}		
+		}		
+		
+		$query = implode(',',$non_empty_ids);
+		
+		$query = "SELECT concat(#__jf_content.reference_id,'_',#__jf_content.reference_field) from #__jf_content inner join #__languages on #__languages.id =#__jf_content.language_id where  reference_table='categories' and reference_id in (".$query.")";
+		
+		$database->setQuery($query);
+		
+		$existing_list = $database->loadResultArray();
+
+		$insert_array[] = array();		
+		$update_array[] = array();
+						
+		foreach($existing_list as $e){
+									
+			$insert_array[$e] = $value;
+									
+			$reference_id = intval($e); 
+			
+			$keys = explode('_',$e);
+			unset ($keys[0]);
+			
+			
+			$reference_field = implode('_',$keys);
+			
+			
+			$database->setQuery("UPDATE #__jf_content set `value`=".$database->Quote($array[$e])." where reference_id=".$reference_id." and reference_table=".$database->Quote($reference_table). " and reference_field=".$database->Quote($reference_field)." and language_id=2");
+			
+			$database->query();
+					
+		
+		}
+		
+					
 	}
 	
 	public function translationGroupToFilename($group,$language){
