@@ -185,7 +185,16 @@ class jolomeaJoomfish extends jolomeaHandler{
 
 		$insert_array[] = array();		
 		$update_array[] = array();
-						
+		
+		$database->setQuery("DROP TABLE IF EXISTS `#__jf_content_jolomea`");		
+		$database->query();
+		$database->setQuery("CREATE TABLE `#__jf_content_jolomea` (`reference_id` INT NOT NULL ,`reference_field` VARCHAR( 100 ) NOT NULL ,`value` mediumTEXT NOT NULL) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$database->query();
+		$database->setQuery("ALTER TABLE `#__jf_content_jolomea` ADD INDEX ( `reference_id` , `reference_field` )");
+		$database->query();
+								
+		$query ='';
+			
 		foreach($existing_list as $e){
 									
 			$insert_array[$e] = $value;
@@ -198,15 +207,21 @@ class jolomeaJoomfish extends jolomeaHandler{
 			
 			$reference_field = implode('_',$keys);
 			
+			if (!empty($query)){
+				$query.=',';
+			}
 			
-			$database->setQuery("UPDATE #__jf_content set `value`=".$database->Quote($array[$e])." where reference_id=".$reference_id." and reference_table=".$database->Quote($reference_table). " and reference_field=".$database->Quote($reference_field)." and language_id=2");
-			
-			$database->query();
-					
-		
+			$query .="(".$reference_id.",".$database->Quote($reference_field).",".$database->Quote($array[$e]).")";
+						
 		}
 		
-					
+		$query = 'INSERT INTO #__jf_content_jolomea VALUES '.$query;
+				
+		$database->setQuery($query);
+		$database->query();
+
+		$database->setQuery('UPDATE #__jf_content, #__jf_content_jolomea set #__jf_content.`value`=#__jf_content_jolomea.`value` where #__jf_content_jolomea.reference_id=#__jf_content.reference_id and #__jf_content_jolomea.reference_field=#__jf_content.reference_field and #__jf_content.reference_table='.$database->Quote($reference_table)." and #__jf_content.language_id=2" );
+		$database->query();
 	}
 	
 	public function translationGroupToFilename($group,$language){
