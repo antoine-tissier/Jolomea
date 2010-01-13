@@ -11,9 +11,9 @@ defined( '_JEXEC' ) or defined( '_VALID_MOS' ) or die( 'Restricted access' );
 class TOOLBAR_jolomea
 {
 	function _DEFAULT()
-	{	
+	{				
 		JoomlaCompatibilityHelper::setTitle(JoomlaCompatibilityHelper::__( 'Jolomea' ), 'langmanager.png' );
-		JoomlaCompatibilityHelper::addToolbarIcon("search", "search.png", "search.png", "search");
+		JoomlaCompatibilityHelper::addToolbarIcon("search", "preview", "preview", "search");
 	}
 	
 	function _EDIT(){

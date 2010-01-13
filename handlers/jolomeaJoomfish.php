@@ -36,14 +36,24 @@ class jolomeaJoomfish extends jolomeaHandler{
 		}		
 	}
 	
+	public function getDefaultLanguage(){				
+		$params = JComponentHelper::getParams('com_languages');
+		$langue = $params->get("site", 'en-GB');		
+		$database					=& JFactory::getDBO();
+		$database->setQuery("SELECT * from #__languages where code=".$database->Quote($langue));
+		$defaultLanguage  = $database->loadObject();
+		return $defaultLanguage;
+	}
+	
 	public function search($keyword, $language_target, $language_source){		
 		$search = array();
 		$search_r = array();
-		
+				
 		if (!empty($keyword)){			
 			$this->index();
+						
 			$database					=& JFactory::getDBO();
-			
+		
 			$database->setQuery('SELECT id from #__languages where shortcode='.$database->Quote($language_source));			
 			$language_source=$database->loadResult();
 		
@@ -79,6 +89,12 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 		$file = $params[0];
 		
+		$language = $params[1];		
+		
+		$defaultLanguage = $this->getDefaultLanguage();
+		
+		$database					=& JFactory::getDBO();
+		
 		$object = simplexml_load_file($_SERVER['DOCUMENT_ROOT']."/administrator/components/com_joomfish/contentelements/".$file.".xml");
 		
 		$reference_id = $object->reference->table->xpath("field[@type='referenceid']");		
@@ -96,28 +112,37 @@ class jolomeaJoomfish extends jolomeaHandler{
 			$fields[]=strval($field['name']);
 		}
 		
-		$query = 'SELECT `'.$reference_id.'`';
-		
-		foreach($fields as $field){
-			$query .= ',`';
-			$query .= $field;
-			$query .= '`';
-		}
-		
-		
-		$query .= ' from #__'.$table_name;
-		
-		$database					=& JFactory::getDBO();
-		$database->setQuery($query);
-		
-		foreach($database->loadAssocList(0) as $row){
+		if ($defaultLanguage->code==$language){		
+			$query = 'SELECT `'.$reference_id.'`';
+			
 			foreach($fields as $field){
-						
-				$getTranslationFileToArray [$row[$reference_id]."_".$field] = $row[$field];
-	
+				$query .= ',`';
+				$query .= $field;
+				$query .= '`';
+			}			
+			
+			$query .= ' from #__'.$table_name;
+			
+			
+			$database->setQuery($query);
+			
+			foreach($database->loadAssocList(0) as $row){
+				foreach($fields as $field){						
+					$getTranslationFileToArray [$row[$reference_id]."_".$field] = $row[$field];	
+				}
+			}				
+		}
+
+		//Whatever it is the default language, we should check if the results are overrided by Joomfish		
+		$database->setQuery("SELECT #__jf_content.* from #__jf_content inner join #__languages on #__languages.id = #__jf_content.language_id where reference_table=".$database->Quote($file)." and code=".$database->Quote($language));
+		
+		$results =$database->loadObjectList();
+		
+		if (is_array($results)){
+			foreach($results as $result){		
+				$getTranslationFileToArray[$result->reference_id."_".$result->reference_field] = $result->value;		
 			}
 		}
-		
 		
 		return $getTranslationFileToArray;
 	}
