@@ -36,13 +36,17 @@ class jolomeaJoomfish extends jolomeaHandler{
 		}		
 	}
 	
+	public function getLanguageByCode($langue){
+		$database					=& JFactory::getDBO();
+		$database->setQuery("SELECT * from #__languages where code=".$database->Quote($langue));
+		$language  = $database->loadObject();
+		return $language;
+	}
+	
 	public function getDefaultLanguage(){				
 		$params = JComponentHelper::getParams('com_languages');
 		$langue = $params->get("site", 'en-GB');		
-		$database					=& JFactory::getDBO();
-		$database->setQuery("SELECT * from #__languages where code=".$database->Quote($langue));
-		$defaultLanguage  = $database->loadObject();
-		return $defaultLanguage;
+		return self::getLanguageByCode($langue);		
 	}
 	
 	public function search($keyword, $language_target, $language_source){		
@@ -154,16 +158,13 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 		$user =& JFactory::getUser();				
 		
-		$database					=& JFactory::getDBO();
-		
-		$language_id='';
+		$database					=& JFactory::getDBO();		
 				
+		$language_id = self::getLanguageByCode($language);
+		$language_id = $language_id->id;				
 		
 		$modified=time();
-		$modified_by='';
-		
-		//fr-FR
-		//categories
+		$modified_by=$user->id;	
 		
 		$non_empty_keys = array();
 		$non_empty_ids = array();		
@@ -182,8 +183,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 		$database->setQuery($query);
 		
 		$existing_list = $database->loadResultArray();
-
-		$insert_array[] = array();		
+		
 		$update_array[] = array();
 		
 		$database->setQuery("DROP TABLE IF EXISTS `#__jf_content_jolomea`");		
@@ -197,7 +197,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 			
 		foreach($existing_list as $e){
 									
-			$insert_array[$e] = $value;
+			$update_array[$e] = $value;
 									
 			$reference_id = intval($e); 
 			
@@ -211,16 +211,37 @@ class jolomeaJoomfish extends jolomeaHandler{
 				$query.=',';
 			}
 			
-			$query .="(".$reference_id.",".$database->Quote($reference_field).",".$database->Quote($array[$e]).")";
-						
+			$query .="(".$reference_id.",".$database->Quote($reference_field).",".$database->Quote($array[$e]).")";					
 		}
-		
+									
 		$query = 'INSERT INTO #__jf_content_jolomea VALUES '.$query;
 				
 		$database->setQuery($query);
 		$database->query();
 
-		$database->setQuery('UPDATE #__jf_content, #__jf_content_jolomea set #__jf_content.`value`=#__jf_content_jolomea.`value` where #__jf_content_jolomea.reference_id=#__jf_content.reference_id and #__jf_content_jolomea.reference_field=#__jf_content.reference_field and #__jf_content.reference_table='.$database->Quote($reference_table)." and #__jf_content.language_id=2" );
+		$database->setQuery('UPDATE #__jf_content, #__jf_content_jolomea set modified_by='.$modified_by.' ,modified=now(),#__jf_content.`value`=#__jf_content_jolomea.`value` where #__jf_content_jolomea.reference_id=#__jf_content.reference_id and #__jf_content_jolomea.reference_field=#__jf_content.reference_field and #__jf_content.reference_table='.$database->Quote($reference_table)." and #__jf_content.language_id=".$language_id );
+		$database->query();
+		
+		// Now we inserts the new translation
+		
+		$query ="";		
+		
+		foreach($array as $key=>$value){
+			if (!empty($value)){
+				if (!isset($update_array[$key])){
+					if (!empty($query)) $query.=',';
+					$reference_id = intval($key); 
+					$keys = explode('_',$key);
+					unset ($keys[0]);						
+					$reference_field = implode('_',$keys);
+					$query.='('.$language_id.','.$reference_id.','.$database->Quote($reference_table).','.$database->Quote($reference_field).','.$database->Quote($value).',now(),'.$modified_by.',1)';
+				}		
+			}
+		}
+		
+		$query = 'INSERT INTO #__jf_content (language_id,reference_id,reference_table,reference_field,value,modified,modified_by,published) VALUES '.$query;
+		
+		$database->setQuery($query);
 		$database->query();
 	}
 	
