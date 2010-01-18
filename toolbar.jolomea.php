@@ -14,7 +14,7 @@ require_once "toolbar.jolomea.html.php";
 switch ($task)
 {
 	case "editTranslationGroup":
-		TOOLBAR_jolomea::_EDIT();
+		TOOLBAR_jolomea::_EDIT(($handler=="jolomeaBackOfficeIniJoomla")&&($translation_group=="com_jolomea"));
 		TOOLBAR_jolomea::_DEFAULT();
 		break;
 	default:

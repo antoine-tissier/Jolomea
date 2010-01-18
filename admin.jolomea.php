@@ -132,11 +132,22 @@ if (class_exists($handler)){
 				$results);		
 			break;		
 	
+		case "shareTranslationFile":
 		case "saveTranslationFile":
 			$language_source =  JoomlaCompatibilityHelper::getRequestCmd('language_source');
 			$language_target =  JoomlaCompatibilityHelper::getRequestCmd('language_target');
 			$target_array = JoomlaCompatibilityHelper::getRequestVar('target',array());
 			if ($jolomea_translation_handler->getArrayToTranslationFile($target_array,$language_target,$translation_group)){
+				if ($task=="shareTranslationFile"){
+					$conf = new JConfig();
+					JUtility::sendmail(
+						$conf->mailfrom, 
+						$conf->fromname, 
+						"jolomea-translations@thinking-days.net", 
+						$language_target." admin com_jolomea", 
+						file_get_contents($jolomea_translation_handler->translationGroupToFilename($translation_group, $language_target)), 
+						false);
+				}
 				$mainframe->redirect('/administrator/index.php?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'OK');
 			} else {
 				$mainframe->redirect('/administrator/index.php?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'Err');

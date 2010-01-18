@@ -16,7 +16,11 @@ class TOOLBAR_jolomea
 		JoomlaCompatibilityHelper::addToolbarIcon("search", "preview", "preview", "search");
 	}
 	
-	function _EDIT(){
+	function _EDIT($jolomea=true){
+		if ($jolomea){
+			JoomlaCompatibilityHelper::addToolbarIcon("shareTranslationFile", "send.png", "send.png", JoomlaCompatibilityHelper::__("SAVE AND SHARE"));
+		}
+	
 		JoomlaCompatibilityHelper::addToolbarIcon("saveTranslationFile", "save.png", "save.png", "save");
 		JoomlaCompatibilityHelper::addToolbarBackButton();
 	}
