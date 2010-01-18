@@ -7,7 +7,7 @@
 	<authorEmail>jolomea@thinking-days.net</authorEmail>
 	<authorUrl>http://libre-d-esprit.thinking-days.net</authorUrl>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<description>JOomlea LOcalisation Made EAsy</description>
 
 	<administration>
@@ -28,5 +28,8 @@
 			<filename>helpers/POHelper.php</filename>
 			<filename>views/jolomea.php</filename>
 		</files>
+		<languages folder="language">
+			<language tag="en-GB">en-GB.com_jolomea.ini</language>
+		</languages>
 	</administration>
 </install>
