@@ -29,11 +29,11 @@ class JolomeaViewJolomea{
 			<table style="width:30%">
 				<tr>
 					<td nowrap="nowrap">					
-					<?=JoomlaCompatibilityHelper::__('Target language')?>:  <?=$language_select?>
+					<?=JoomlaCompatibilityHelper::__('TARGET LANGUAGE')?>:  <?=$language_select?>
 					<input type="hidden" name="language_source" value="<?=$language_source?>"/>
 					</td>
 					<td nowrap="nowrap">					
-					<?=JoomlaCompatibilityHelper::__('Keyword')?>:  <input type="text" name="keyword" value="<?=$keyword?>"/>
+					<?=JoomlaCompatibilityHelper::__('KEYWORD')?>:  <input type="text" name="keyword" value="<?=$keyword?>"/>
 					</td>
 					<td nowrap="nowrap">					
 						<input type="submit"/>
@@ -88,13 +88,13 @@ class JolomeaViewJolomea{
 			<?php } ?>
 			
 			<p>
-				<label><?=JoomlaCompatibilityHelper::__("Translation group")?> : </label>
+				<label><?=JoomlaCompatibilityHelper::__("TRANSLATION GROUP")?> : </label>
 				<input type="text" name="translation_group" readonly="readonly" value="<?=$translation_group?>"/>
 			</p>
 			
-			<?=JoomlaCompatibilityHelper::__('Target language')?> : <?=$availableLanguagesTargetSelect?>			
+			<?=JoomlaCompatibilityHelper::__('TARGET LANGUAGE')?> : <?=$availableLanguagesTargetSelect?>			
 			<p>
-				<label><?=JoomlaCompatibilityHelper::__('file')?> :</label>
+				<label><?=JoomlaCompatibilityHelper::__('FILE')?> :</label>
 				<input name="importFile" type="file"/>
 			</p>			
 			<input type="submit" />
@@ -112,8 +112,8 @@ class JolomeaViewJolomea{
 			<table style="width:100%">
 				<tr>
 					<td nowrap="nowrap">
-					<?=JoomlaCompatibilityHelper::__('Source language')?>: <?=$availableLanguagesSourceSelect?>
-					<?=JoomlaCompatibilityHelper::__('Target language')?>:  <?=$availableLanguagesTargetSelect?>
+					<?=JoomlaCompatibilityHelper::__('SOURCE LANGUAGE')?>: <?=$availableLanguagesSourceSelect?>
+					<?=JoomlaCompatibilityHelper::__('TARGET LANGUAGE')?>:  <?=$availableLanguagesTargetSelect?>
 					</td>
 				</tr>
 			</table>			
@@ -151,14 +151,14 @@ class JolomeaViewJolomea{
 				<ul>
 					<li>				
 						<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=editTranslationGroup">
-							<?=JoomlaCompatibilityHelper::__('Edit translation')?>
+							<?=JoomlaCompatibilityHelper::__('EDIT TRANSLATION')?>
 						</a>
 					</li>
 				<?
 
 				?>
 					<li>
-						<?=JoomlaCompatibilityHelper::__('Export in ')?>					
+						<?=JoomlaCompatibilityHelper::__('EXPORT IN')?>					
 						<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=exportXliff">
 							XLIFF
 						</a>,
@@ -186,7 +186,7 @@ class JolomeaViewJolomea{
 				?>
 					</li>
 					<li>
-						<?=JoomlaCompatibilityHelper::__('Import in ')?>
+						<?=JoomlaCompatibilityHelper::__('Import in')?>
 						
 						<a href="index<?=(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?=$handler?>&translation_group=<?=$available_translation_group?>&language_source=<?=$language_source?>&language_target=<?=$language_target?>&task=importXliff">
 							XLIFF
@@ -251,9 +251,9 @@ class JolomeaViewJolomea{
 		
 			<table class="adminlist">
 				<thead>
-					<th>Key</th>
-					<th style="width:40%">Source</th>
-					<th style="width:40%">Target</th>
+					<th><?=JoomlaCompatibilityHelper::__('KEY')?></th>
+					<th style="width:40%"><?=JoomlaCompatibilityHelper::__('SOURCE')?></th>
+					<th style="width:40%"><?=JoomlaCompatibilityHelper::__('TARGET')?></th>
 				</thead>
 				<tbody>
 				<?php foreach($translation_array as $key=>$row){	?>
@@ -261,7 +261,7 @@ class JolomeaViewJolomea{
 				<td class="key"><?=$key?></td>
 				<td class="source"><?=$row['source']?></td>
 				<td class="target"><textarea name='target[<?=$key?>]' style="width:100%"><?=$row['target']?></textarea></td>
-				<td><button onclick="jolomeaGoogleTranslate(this);return false;"><?=JoomlaCompatibilityHelper::__('Suggest')?></button></td>
+				<td><button onclick="jolomeaGoogleTranslate(this);return false;"><?=JoomlaCompatibilityHelper::__('SUGGEST')?></button></td>
 				</tr>
 				<?php } ?>
 				</tbody>				
