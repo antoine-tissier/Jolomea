@@ -14,6 +14,7 @@ class TOOLBAR_jolomea
 	{				
 		JoomlaCompatibilityHelper::setTitle(JoomlaCompatibilityHelper::__( 'Jolomea' ), 'langmanager.png' );
 		JoomlaCompatibilityHelper::addToolbarIcon("search", "preview", "preview", "search");
+		JoomlaCompatibilityHelper::addToolbarIcon("help", "help", "help", "help");
 	}
 	
 	function _EDIT($jolomea=true){

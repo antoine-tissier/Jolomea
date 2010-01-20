@@ -281,7 +281,12 @@ if (class_exists($handler)){
 			}		
 			
 			break;
-				
+
+		case 'help':
+			header('Location: http://jolomea.thinking-days.net/documentation.html');
+			die();
+			break;
+			
 		default :		
 			$available_translation_datas = $jolomea_translation_handler->getAvailableTranslationData($language_source);		
 			JolomeaViewJolomea::listTranslationData($available_translation_datas, $language_source, $language_target,$handler);		
