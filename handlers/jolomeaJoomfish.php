@@ -22,6 +22,10 @@ class jolomeaJoomfish extends jolomeaHandler{
 		return 'jolomeaJoomfish';
 	}
 
+	public static function getHandlersList(){
+		return array('jolomeaJoomfish');
+	}
+
 	
 	public function getFilePath(){	
 		return JoomlaCompatibilityHelper::getJoomlaRoot()."/administrator/components/com_virtuemart/languages/";

@@ -12,6 +12,8 @@ defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
 abstract class jolomeaHandler{
 	public static function displayEntryMenu(){}
 	
+	public static function getHandlersList(){}
+	
 	public abstract function getAvailableLanguages();
 	
 	public function getDefaultLanguageSource(){	

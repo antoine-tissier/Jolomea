@@ -12,13 +12,38 @@ abstract class jolomeaIniJoomla extends jolomeaHandler{
 
 	public abstract function getIniFilesPath();
 
+	public abstract function filterTranslationGroup($name);
+	
 	public static function displayEntryMenu(){		
 		$handler = JoomlaCompatibilityHelper::getRequestCmd('handler');
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Joomla Front'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeIniJoomla',$handler=='jolomeaFrontOfficeIniJoomla');
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Joomla Back'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeIniJoomla',$handler=='jolomeaBackOfficeIniJoomla');
-		return array('jolomeaFrontOfficeIniJoomla','jolomeaBackOfficeIniJoomla');
+
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('FRONT COMPONENT'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeComponentIniJoomla',$handler=='jolomeaFrontOfficeComponentIniJoomla');
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Front Global'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeGlobalIniJoomla',$handler=='jolomeaFrontOfficeGlobalIniJoomla');
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Front Module'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeModuleIniJoomla',$handler=='jolomeaFrontOfficeModuleIniJoomla');
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Front Plugin'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficePluginIniJoomla',$handler=='jolomeaFrontOfficePluginIniJoomla');
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Front Template'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeTemplateIniJoomla',$handler=='jolomeaFrontOfficeTemplateIniJoomla');		
+		
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Back Component'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeComponentIniJoomla',$handler=='jolomeaBackOfficeComponentIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Back Global'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeGlobalIniJoomla',$handler=='jolomeaBackOfficeGlobalIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Back Module'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeModuleIniJoomla',$handler=='jolomeaBackOfficeModuleIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Back Plugin'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficePluginIniJoomla',$handler=='jolomeaBackOfficePluginIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('Back Template'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeTemplateIniJoomla',$handler=='jolomeaBackOfficeTemplateIniJoomla');	
 	}
-	
+
+	public static function getHandlersList(){
+		return array(
+			'jolomeaFrontOfficeComponentIniJoomla',
+			'jolomeaFrontOfficeGlobalIniJoomla',
+			'jolomeaFrontOfficeModuleIniJoomla',
+			'jolomeaFrontOfficePluginIniJoomla',
+			'jolomeaFrontOfficeTemplateIniJoomla',
+			'jolomeaBackOfficeComponentIniJoomla',
+			'jolomeaBackOfficeGlobalIniJoomla',
+			'jolomeaBackOfficeModuleIniJoomla',
+			'jolomeaBackOfficePluginIniJoomla',
+			'jolomeaBackOfficeTemplateIniJoomla');
+		
+	}	
 	
 	public function getFilenameToTranslationGroup($file,$language){
 		$translation_group = substr(basename($file,'.ini'), strlen($language));							
@@ -173,14 +198,17 @@ abstract class jolomeaIniJoomla extends jolomeaHandler{
 							if ($pathinfo['extension']=='ini'){					
 							
 								$translation_group  = $this->getFilenameToTranslationGroup($file,$language);															
-							
-								$tmp =array();
-								foreach($languages as $_language){
 								
-									$tmp[$_language] = $this->getAvailableTranslationDataForGroup($_language,$translation_group);
+								if ($this->filterTranslationGroup($translation_group)){								
+		
+									$tmp =array();
+									foreach($languages as $_language){
 									
+										$tmp[$_language] = $this->getAvailableTranslationDataForGroup($_language,$translation_group);
+										
+									}
+									$translationFiles [$translation_group] = $tmp;
 								}
-								$translationFiles [$translation_group] = $tmp;
 							
 							}
 						}
@@ -188,11 +216,12 @@ abstract class jolomeaIniJoomla extends jolomeaHandler{
 				}
 			}
 		}
+		
 		return $translationFiles;
 	}
 }
 
-class jolomeaBackOfficeIniJoomla extends jolomeaIniJoomla{
+abstract class jolomeaBackOfficeIniJoomla extends jolomeaIniJoomla{
 	public function getIniFilesPath(){
 		return JPATH_ADMINISTRATOR.DS."language";
 	}
@@ -200,15 +229,76 @@ class jolomeaBackOfficeIniJoomla extends jolomeaIniJoomla{
 	public function getHandlerName(){
 		return "jolomeaBackOfficeIniJoomla";
 	}
+	
 }
 
-class jolomeaFrontOfficeIniJoomla extends jolomeaIniJoomla{
+class jolomeaBackOfficeComponentIniJoomla extends jolomeaBackOfficeIniJoomla{	
+	public function filterTranslationGroup($name){
+		return(substr($name,0,4)=='com_');
+	}
+}
+class jolomeaBackOfficeGlobalIniJoomla extends jolomeaBackOfficeIniJoomla{	
+	public  function filterTranslationGroup($name){
+		return $name==='*';
+	}
+}
+class jolomeaBackOfficeModuleIniJoomla extends jolomeaBackOfficeIniJoomla{	
+	public  function filterTranslationGroup($name){
+		return(substr($name,0,4)=='mod_');
+	}
+}
+class jolomeaBackOfficePluginIniJoomla extends jolomeaBackOfficeIniJoomla{	
+	public  function filterTranslationGroup($name){
+		return(substr($name,0,4)=='plg_');
+	}
+}
+class jolomeaBackOfficeTemplateIniJoomla extends jolomeaBackOfficeIniJoomla{	
+	public  function filterTranslationGroup($name){
+		return(substr($name,0,4)=='tpl_');
+	}
+}
+
+abstract class jolomeaFrontOfficeIniJoomla extends jolomeaIniJoomla{
 	public function getIniFilesPath(){
 		return JPATH_ROOT.DS."language";		
 	}
 	public function getHandlerName(){
 		return "jolomeaFrontOfficeIniJoomla";
 	}
+	
 }
+
+
+class jolomeaFrontOfficeComponentIniJoomla extends jolomeaFrontOfficeIniJoomla{
+	public function filterTranslationGroup($name){
+		return(substr($name,0,4)=='com_');
+	}	
+}
+
+class jolomeaFrontOfficeGlobalIniJoomla extends jolomeaFrontOfficeIniJoomla{
+	public function filterTranslationGroup($name){
+		return($name==='*');
+	}	
+}
+
+class jolomeaFrontOfficeModuleIniJoomla extends jolomeaFrontOfficeIniJoomla{
+	public function filterTranslationGroup($name){
+		return(substr($name,0,4)=='mod_');
+	}	
+}
+
+class jolomeaFrontOfficePluginIniJoomla extends jolomeaFrontOfficeIniJoomla{
+	public function filterTranslationGroup($name){
+		return(substr($name,0,4)=='plg_');
+	}	
+}
+
+class jolomeaFrontOfficeTemplateIniJoomla extends jolomeaFrontOfficeIniJoomla{
+	public function filterTranslationGroup($name){
+		return(substr($name,0,4)=='tpl_');
+	}	
+}
+
+
 
 }

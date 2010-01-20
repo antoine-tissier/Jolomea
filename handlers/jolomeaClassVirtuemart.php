@@ -18,6 +18,10 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 		return array('jolomeaClassVirtuemart');
 	}
 
+	public static function getHandlersList(){
+		return array('jolomeaClassVirtuemart');
+	}
+	
 	public function getHandlerName() {
 		return 'jolomeaClassVirtuemart';
 	}

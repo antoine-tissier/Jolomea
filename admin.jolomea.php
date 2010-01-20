@@ -18,7 +18,7 @@ require_once 'helpers/handlerHelper.php';
 
 $task = JoomlaCompatibilityHelper::getRequestCmd('task');
 
-$defaultHandlerName = 'jolomeaFrontOfficeIniJoomla';
+$defaultHandlerName = 'jolomeaBackOfficeGlobalIniJoomla';
 
 if (!defined('_JEXEC')){
 	$defaultHandlerName = 'jolomeaDefineJoomla';
@@ -45,7 +45,8 @@ if ($handle=opendir(dirname(__FILE__).'/handlers'))
 			{
 				require_once dirname(__FILE__).'/handlers/'.$file;
 				if (class_exists(basename($file,'.php'))){
-					$_handlers =  eval( "return ".basename($file,'.php')."::displayEntryMenu();");					
+					eval(basename($file,'.php')."::displayEntryMenu();");					
+					$_handlers =  eval( "return ".basename($file,'.php')."::getHandlersList();");					
 															
 					if (is_array($_handlers)){
 						
@@ -64,7 +65,7 @@ if ($handle=opendir(dirname(__FILE__).'/handlers'))
 JoomlaCompatibilityHelper::displaySubMenu();
 
 if (class_exists($handler)){
-  $jolomea_translation_handler = eval ("return  new $handler();");
+  $jolomea_translation_handler = new $handler;
 	
 	$available_languages = $jolomea_translation_handler->getAvailableLanguages();
 
