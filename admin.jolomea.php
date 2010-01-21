@@ -107,7 +107,7 @@ if (class_exists($handler)){
 			
 			foreach($handlers as $s_handler){				
 				if (class_exists($s_handler)){														
-					$_handler = eval ("return  new $s_handler();");				
+					$_handler = new $s_handler;
 					if (method_exists($_handler,'search')){						
 						$results[$s_handler] = $_handler->search($keyword, $language_target, $language_source);
 						$language_search[$s_handler] = 	$_handler->getAvailableLanguages();						

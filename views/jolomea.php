@@ -57,11 +57,11 @@ class JolomeaViewJolomea{
 			<?php foreach($results as $handler=>$result_h){ ?>
 				<?php foreach( $result_h as $result ) {
 				
-				$link = "index2.php?option=com_jolomea&handler=".$result['handler']."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$result['language_source']."&language_target=".$result['language']."#row_".$result['key'];
+				$link = "index2.php?option=com_jolomea&handler=".$handler."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$result['language_source']."&language_target=".$result['language']."#row_".$result['key'];
 				
 				?>			
 				<tr>					
-					<td><a href="<?=$link?>"><?=$result['handler']?></a></td>
+					<td><a href="<?=$link?>"><?=$handler?></a></td>
 					<td><a href="<?=$link?>"><?=$result['group']?></a></td>
 					<td><a href="<?=$link?>"><?=$result['key']?></a></td>
 					<td><a href="<?=$link?>"><?=htmlentities($result['text'],ENT_COMPAT,'UTF-8')?></a></td>
