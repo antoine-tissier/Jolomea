@@ -139,13 +139,16 @@ class JolomeaViewJolomea{
 	
 	function listTranslationData($translationData, $language_source, $language_target,$handler){
 	?>
-		<table class="adminlist">
+		<div>
 	<?
 			if (is_array($translationData)) 
 			foreach($translationData as $available_translation_group => $available_translation_group_info){
-				?><tr><td><?
+				?><div style="float:left;margin:5px;padding:5px;border:1px solid #EEEEEE;"><?
 				//Ecrire les translation group de facon plus jolie du style : composant banner plutot que com_banner
+				if ($available_translation_group=="com_jolomea")echo "<strong>";
 				echo $available_translation_group;
+				if ($available_translation_group=="com_jolomea")echo "</strong>";
+				
 		
 				?>
 				<ul>
@@ -206,9 +209,9 @@ class JolomeaViewJolomea{
 				
 				</ul>
 				
-				</td></tr><?
+				</div><?
 			}
-		?></table>
+		?><br style="clear:both"/></div>
 	<?
 	}
 	
