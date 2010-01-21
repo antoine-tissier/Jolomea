@@ -2,12 +2,12 @@
 <!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
 <install type="component" version="1.5.0">
 	<name>Jolomea</name>
-	<creationDate>19.01.2010</creationDate>
+	<creationDate>21.01.2010</creationDate>
 	<author>Libre d'esprit</author>
 	<authorEmail>jolomea@thinking-days.net</authorEmail>
 	<authorUrl>http://libre-d-esprit.thinking-days.net</authorUrl>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<description>JOomlea LOcalisation Made EAsy</description>
 
 	<administration>
