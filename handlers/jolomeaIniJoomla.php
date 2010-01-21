@@ -17,17 +17,17 @@ abstract class jolomeaIniJoomla extends jolomeaHandler{
 	public static function displayEntryMenu(){		
 		$handler = JoomlaCompatibilityHelper::getRequestCmd('handler');
 
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE').'/'.JText::_('COMPONENT'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeComponentIniJoomla',$handler=='jolomeaFrontOfficeComponentIniJoomla');
 		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeGlobalIniJoomla',$handler=='jolomeaFrontOfficeGlobalIniJoomla');
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE').'/'.JText::_('COMPONENT'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeComponentIniJoomla',$handler=='jolomeaFrontOfficeComponentIniJoomla');		
 		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE').'/'.JText::_('MODULE'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeModuleIniJoomla',$handler=='jolomeaFrontOfficeModuleIniJoomla');
 		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE').'/'.JText::_('PLUGIN'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficePluginIniJoomla',$handler=='jolomeaFrontOfficePluginIniJoomla');
 		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('SITE').'/'.JText::_('TEMPLATE'), 'index.php?option=com_jolomea&handler=jolomeaFrontOfficeTemplateIniJoomla',$handler=='jolomeaFrontOfficeTemplateIniJoomla');		
-		
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('BACK').'/'.JText::_('COMPONENT'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeComponentIniJoomla',$handler=='jolomeaBackOfficeComponentIniJoomla');	
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('BACK'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeGlobalIniJoomla',$handler=='jolomeaBackOfficeGlobalIniJoomla');	
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('BACK').'/'.JText::_('MODULE'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeModuleIniJoomla',$handler=='jolomeaBackOfficeModuleIniJoomla');	
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('BACK').'/'.JText::_('PLUGIN'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficePluginIniJoomla',$handler=='jolomeaBackOfficePluginIniJoomla');	
-		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('BACK').'/'.JText::_('TEMPLATE'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeTemplateIniJoomla',$handler=='jolomeaBackOfficeTemplateIniJoomla');	
+
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('ADMINISTRATION'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeGlobalIniJoomla',$handler=='jolomeaBackOfficeGlobalIniJoomla');			
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('ADMINISTRATION').'/'.JText::_('COMPONENT'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeComponentIniJoomla',$handler=='jolomeaBackOfficeComponentIniJoomla');			
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('ADMINISTRATION').'/'.JText::_('MODULE'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeModuleIniJoomla',$handler=='jolomeaBackOfficeModuleIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('ADMINISTRATION').'/'.JText::_('PLUGIN'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficePluginIniJoomla',$handler=='jolomeaBackOfficePluginIniJoomla');	
+		JoomlaCompatibilityHelper::addEntrySubMenu(JText::_('ADMINISTRATION').'/'.JText::_('TEMPLATE'), 'index.php?option=com_jolomea&handler=jolomeaBackOfficeTemplateIniJoomla',$handler=='jolomeaBackOfficeTemplateIniJoomla');	
 	}
 
 	public static function getHandlersList(){
