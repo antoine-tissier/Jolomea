@@ -45,8 +45,9 @@ if ($handle=opendir(dirname(__FILE__).'/handlers'))
 			{
 				require_once dirname(__FILE__).'/handlers/'.$file;
 				if (class_exists(basename($file,'.php'))){
-					eval(basename($file,'.php')."::displayEntryMenu();");					
-					$_handlers =  eval( "return ".basename($file,'.php')."::getHandlersList();");					
+				
+					call_user_func_array (basename($file,'.php').'::displayEntryMenu', array());
+					$_handlers =  call_user_func_array (basename($file,'.php')."::getHandlersList",array());					
 															
 					if (is_array($_handlers)){
 						
