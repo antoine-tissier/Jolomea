@@ -1,4 +1,4 @@
-<?
+<?php
 defined( '_JEXEC' ) or defined( '_VALID_MOS' ) or die( 'Restricted access' );
 
 /**
@@ -199,30 +199,33 @@ class jolomeaJoomfish extends jolomeaHandler{
 								
 		$query ='';
 			
-		foreach($existing_list as $e){
-									
-			$update_array[$e] = $value;
-									
-			$reference_id = intval($e); 
-			
-			$keys = explode('_',$e);
-			unset ($keys[0]);
-			
-			
-			$reference_field = implode('_',$keys);
-			
-			if (!empty($query)){
-				$query.=',';
-			}
-			
-			$query .="(".$reference_id.",".$database->Quote($reference_field).",".$database->Quote($array[$e]).")";					
-		}
-									
-		$query = 'INSERT INTO #__jf_content_jolomea VALUES '.$query;
+		if (is_array($existing_list)){
+			foreach($existing_list as $e){
+										
+				$update_array[$e] = $value;
+										
+				$reference_id = intval($e); 
 				
-		$database->setQuery($query);
-		$database->query();
-
+				$keys = explode('_',$e);
+				unset ($keys[0]);
+				
+				
+				$reference_field = implode('_',$keys);
+				
+				if (!empty($query)){
+					$query.=',';
+				}
+				
+				$query .="(".$reference_id.",".$database->Quote($reference_field).",".$database->Quote($array[$e]).")";					
+			}
+		
+			$query = 'INSERT INTO #__jf_content_jolomea VALUES '.$query;
+				
+			$database->setQuery($query);
+			$database->query();
+		
+		}
+								
 		$database->setQuery('UPDATE #__jf_content, #__jf_content_jolomea set modified_by='.$modified_by.' ,modified=now(),#__jf_content.`value`=#__jf_content_jolomea.`value` where #__jf_content_jolomea.reference_id=#__jf_content.reference_id and #__jf_content_jolomea.reference_field=#__jf_content.reference_field and #__jf_content.reference_table='.$database->Quote($reference_table)." and #__jf_content.language_id=".$language_id );
 		$database->query();
 		
@@ -230,23 +233,25 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 		$query ="";		
 		
-		foreach($array as $key=>$value){
-			if (!empty($value)){
-				if (!isset($update_array[$key])){
-					if (!empty($query)) $query.=',';
-					$reference_id = intval($key); 
-					$keys = explode('_',$key);
-					unset ($keys[0]);						
-					$reference_field = implode('_',$keys);
-					$query.='('.$language_id.','.$reference_id.','.$database->Quote($reference_table).','.$database->Quote($reference_field).','.$database->Quote($value).',now(),'.$modified_by.',1)';
-				}		
+		if (is_array($array)){		
+			foreach($array as $key=>$value){
+				if (!empty($value)){
+					if (!isset($update_array[$key])){
+						if (!empty($query)) $query.=',';
+						$reference_id = intval($key); 
+						$keys = explode('_',$key);
+						unset ($keys[0]);						
+						$reference_field = implode('_',$keys);
+						$query.='('.$language_id.','.$reference_id.','.$database->Quote($reference_table).','.$database->Quote($reference_field).','.$database->Quote($value).',now(),'.$modified_by.',1)';
+					}		
+				}
 			}
-		}
+			
+			$query = 'INSERT INTO #__jf_content (language_id,reference_id,reference_table,reference_field,value,modified,modified_by,published) VALUES '.$query;
 		
-		$query = 'INSERT INTO #__jf_content (language_id,reference_id,reference_table,reference_field,value,modified,modified_by,published) VALUES '.$query;
-		
-		$database->setQuery($query);
-		$database->query();
+			$database->setQuery($query);
+			$database->query();		
+		}		
 	}
 	
 	public function translationGroupToFilename($group,$language){

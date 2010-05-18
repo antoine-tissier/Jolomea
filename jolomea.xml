@@ -31,6 +31,8 @@
 		<languages folder="language">
 			<language tag="en-GB">en-GB.com_jolomea.ini</language>
 			<language tag="fr-FR">fr-FR.com_jolomea.ini</language>
+			<language tag="pt-BR">pt-BR.com_jolomea.ini</language>
+			<language tag="es-ES">es-ES.com_jolomea.ini</language>
 		</languages>
 	</administration>
 </install>
