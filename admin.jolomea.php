@@ -257,7 +257,7 @@ if (class_exists($handler)){
 							$translation_array = XliffHelper::import(file_get_contents($tmp_file));						
 							break;
 					}
-					
+															
 					if (!$jolomea_translation_handler->getArrayToTranslationFile($translation_array,$language_target,$translation_group)){					
 						$message = JoomlaCompatibilityHelper::__('File access error');
 					}

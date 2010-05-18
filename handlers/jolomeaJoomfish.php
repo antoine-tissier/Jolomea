@@ -251,7 +251,9 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 			$database->setQuery($query);
 			$database->query();		
-		}		
+		}
+		
+		return true;
 	}
 	
 	public function translationGroupToFilename($group,$language){
