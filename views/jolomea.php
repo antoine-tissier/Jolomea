@@ -8,8 +8,7 @@
 
 // no direct access
 defined('_JEXEC') or defined( '_VALID_MOS' ) or die('Restricted access');
-
-JHTML::_('behavior.mootools');
+JoomlaCompatibilityHelper::loadMootools();
 
 class JolomeaViewJolomea{
 
@@ -25,7 +24,7 @@ class JolomeaViewJolomea{
 	function search($keyword, $language_source, $language_target, $language_select, $results=array()){		
 	
 	?>
-		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">					
+		<form action="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">					
 			<input type="hidden" name="task" value="search"/>
 		
 			<table style="width:30%">
@@ -59,7 +58,7 @@ class JolomeaViewJolomea{
 			<?php foreach($results as $handler=>$result_h){ ?>
 				<?php foreach( $result_h as $result ) {
 				
-				$link = "index2.php?option=com_jolomea&handler=".$handler."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$result['language_source']."&language_target=".$result['language']."#row_".$result['key'];
+				$link = JoomlaCompatibilityHelper::getIndexPage()."?option=com_jolomea&handler=".$handler."&task=editTranslationGroup&translation_group=".$result['group']."&language_source=".$result['language_source']."&language_target=".$result['language']."#row_".$result['key'];
 				
 				?>			
 				<tr>					
@@ -80,7 +79,7 @@ class JolomeaViewJolomea{
 
 	function displayImportForm($availableLanguagesTargetSelect, $handler, $translation_group, $message="", $format="ini"){
 	?>
-		<form action="index.php?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">		
+		<form action="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea" enctype="multipart/form-data" method="post" name="adminForm" id="idFormLanguage">		
 			<input type="hidden" name="boxchecked" value="1" />
 			<input type="hidden" name="task" value="import<?php echo ucfirst($format)?>"/>
 			<input type="hidden" name="handler" value="<?php echo $handler?>"/>
@@ -101,12 +100,12 @@ class JolomeaViewJolomea{
 			</p>			
 			<input type="submit" />
 		</form>
-	<?
+	<?php
 	}
 
 	function displayHeader($availableLanguagesSourceSelect,$availableLanguagesTargetSelect, $handler){
 	?>
-		<form action="index.php?option=com_jolomea" method="post" name="adminForm" id="idFormLanguage">
+		<form action="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea" method="post" name="adminForm" id="idFormLanguage">
 			<input type="hidden" name="boxchecked" value="1" />
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="handler" value="<?php echo $handler?>"/>
@@ -119,7 +118,7 @@ class JolomeaViewJolomea{
 					</td>
 				</tr>
 			</table>			
-	<?
+	<?php
 	}
 
 	function displayFooter(){
@@ -136,16 +135,16 @@ class JolomeaViewJolomea{
 			</a>
 		</p>
 		
-		<?
+		<?php
 	}
 	
 	function listTranslationData($translationData, $language_source, $language_target,$handler){
 	?>
 		<div>
-	<?
+	<?php
 			if (is_array($translationData)) 
 			foreach($translationData as $available_translation_group => $available_translation_group_info){
-				?><div style="float:left;margin:5px;padding:5px;border:1px solid #EEEEEE;"><?
+				?><div style="float:left;margin:5px;padding:5px;border:1px solid #EEEEEE;"><?php
 				//Ecrire les translation group de facon plus jolie du style : composant banner plutot que com_banner
 				if ($available_translation_group=="com_jolomea")echo "<strong>";
 				echo $available_translation_group;
@@ -155,31 +154,31 @@ class JolomeaViewJolomea{
 				?>
 				<ul>
 					<li>				
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=editTranslationGroup">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=editTranslationGroup">
 							<?php echo JoomlaCompatibilityHelper::__('EDIT TRANSLATION')?>
 						</a>
 					</li>
-				<?
+				<?php
 
 				?>
 					<li>
 						<?php echo JoomlaCompatibilityHelper::__('EXPORT IN')?>					
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportXliff">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportXliff">
 							XLIFF
 						</a>,
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportPO">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportPO">
 							PO
 						</a>
 
-				<?
+				<?php
 
 						if (JoomlaCompatibilityHelper::isJoomla1_5()){
 						?>	
 						,						
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportIni">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=exportIni">
 							INI
 						</a>
-						<?
+						<?php
 						}
 
 				
@@ -193,16 +192,16 @@ class JolomeaViewJolomea{
 					<li>
 						<?php echo JoomlaCompatibilityHelper::__('Import in')?>
 						
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importXliff">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importXliff">
 							XLIFF
 						</a>
 												
-						<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importPo">
+						<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importPo">
 							, PO
 						</a>
 												
 						<?php if (JoomlaCompatibilityHelper::isJoomla1_5()){ ?>
-							<a href="index<?php echo (JoomlaCompatibilityHelper::isJoomla1_0()?"2":"")?>.php?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importIni">
+							<a href="<?php echo JoomlaCompatibilityHelper::getIndexPage()?>?option=com_jolomea&handler=<?php echo $handler?>&translation_group=<?php echo $available_translation_group?>&language_source=<?php echo $language_source?>&language_target=<?php echo $language_target?>&task=importIni">
 								, INI
 							</a>
 						<?php }?>
@@ -214,10 +213,11 @@ class JolomeaViewJolomea{
 				</div><?
 			}
 		?><br style="clear:both"/></div>
-	<?
+	<?php
 	}
 	
 	function editTranslationData($translation_array){
+		
 		?>
 		<script type='text/javascript'>
 		function submitbutton(pressbutton) {
@@ -261,6 +261,13 @@ class JolomeaViewJolomea{
 		google.load("language", "1");
 		</script>
 		
+		<style type='text/css'>
+			table.adminlist td.key{
+				font-size:0.1em;
+				color:grey;
+			}
+		</style>
+		
 			<table class="adminlist">
 				<thead>
 					<th><?php echo JoomlaCompatibilityHelper::__('KEY')?></th>
@@ -284,7 +291,7 @@ class JolomeaViewJolomea{
 			<span style="display:none" id="language_source_iso2"><?php echo LanguageHelper::getIso2(JoomlaCompatibilityHelper::getRequestVar("language_source"))?></span>
 			<span style="display:none" id="language_target_iso2"><?php echo LanguageHelper::getIso2(JoomlaCompatibilityHelper::getRequestVar("language_target"))?></span>
 			
-		<?
+		<?php
 	}
 	
 }

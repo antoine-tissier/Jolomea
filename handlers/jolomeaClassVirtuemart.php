@@ -13,7 +13,7 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 		$handler = JoomlaCompatibilityHelper::getRequestCmd('handler');
 		
 		if (file_exists(JoomlaCompatibilityHelper::getJoomlaRoot()."/administrator/components/com_virtuemart/languages/")){
-			JoomlaCompatibilityHelper::addEntrySubMenu(JoomlaCompatibilityHelper::__('Virtuemart'), 'index'.(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"").'.php?option=com_jolomea&handler=jolomeaClassVirtuemart',$handler=='jolomeaClassVirtuemart');
+			JoomlaCompatibilityHelper::addEntrySubMenu(JoomlaCompatibilityHelper::__('Virtuemart'), JoomlaCompatibilityHelper::getIndexPage().'?option=com_jolomea&handler=jolomeaClassVirtuemart',$handler=='jolomeaClassVirtuemart');
 		}
 		return array('jolomeaClassVirtuemart');
 	}
@@ -91,21 +91,33 @@ class jolomeaClassVirtuemart extends jolomeaHandler{
 	public function getTranslationFileToArray($file){
 		$data = file($file);
 		$uniqid = uniqid ();
-		
+						
 		$script ='class jolomea_'.$uniqid.'{static $data = array();function initModule($dummy,$array){self::$data=$array;}}';
 		
-		foreach($data as $k=>$row){
-			//$data[$k] = preg_replace  ( "/$(\s)*[define|DEFINE](\s)*\(/"  , "define_".$uniqid."("  , $row  );	
-			//$data[$k] = preg_replace  ( "/$(\s)*[define|DEFINE](\s)*\(/"  , "define_".$uniqid."("  , $row  );	
-			$data[$k] = str_ireplace('$VM_LANG->initModule(',"jolomea_".$uniqid."::initModule("  , $row  );			
-			$data[$k] = str_ireplace('global $VM_LANG;', "" , $data[$k]  );
+		foreach($data as $k=>$row){						
+			$data[$k] = str_ireplace('$VM_LANG->initModule(',"jolomea_".$uniqid."::initModule("  , $row  );									
+			
+			$data[$k] = str_ireplace('vmLanguage', 'vmLanguage_'.$uniqid  , $data[$k]  );			
+			$data[$k] = str_ireplace('vmAbstractLanguage', 'stdclass'  , $data[$k] );			
+			$data[$k] = str_ireplace('phpShopLanguage', 'phpShopLanguage_'.$uniqid  , $data[$k]  );			
+			
+			$data[$k] = str_ireplace('global $VM_LANG;', "" , $data[$k]  );			
+			
 			$data[$k] = str_ireplace("<?php", "" , $data[$k]  );
+			
 			$data[$k] = str_ireplace("?>", "" , $data[$k]  );
-			$script .= $data[$k];
+						
+			$script .= $data[$k];					
 		}
 		
-		$script .= 'return jolomea_'.$uniqid.'::$data;';
-			
+		
+		$script .= 'if (class_exists("vmLanguage_'.$uniqid.'")) {';
+		$script .=	'return get_object_vars($VM_LANG);';
+		$script .= '} else {';
+		$script .=	'return jolomea_'.$uniqid.'::$data;';
+		$script .= '}';
+		
+		
 		$data = eval ($script);
 		
 		return $data;

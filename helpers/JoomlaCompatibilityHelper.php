@@ -58,9 +58,24 @@ class JoomlaCompatibilityHelper{
 		if (self::isJoomla1_5()){
 			JToolBarHelper::custom($task, $image, $image_over, $caption);
 		} else {
-			require_once self::getJoomlaRoot()."/administrator/includes/menubar.html.php";
+			require_once self::getJoomlaRoot()."/administrator/includes/menubar.html.php";			
+									
+			if (substr($image,-4)<>'.png') 
+				$image=$image.'.png';										
+				
+			if (substr($image_over,-4)<>'.png')
+				$image_over=$image_over.'.png';										
+			
 			mosMenuBar::custom($task, $image, $image_over, $caption);
 		}
+	}
+	
+	public static function toolbartStart(){
+		if (self::isJoomla1_0()) mosMenuBar::startTable();
+	}
+	
+	public static function toolbartEnd(){
+		if (self::isJoomla1_0()) mosMenuBar::endTable();
 	}
 	
 	public static function getRequestVar($param, $default=""){
@@ -96,8 +111,17 @@ class JoomlaCompatibilityHelper{
 	
 	public static function displaySubMenu(){
 		//TODO : ameliorer l'affichage
-		if (!self::isJoomla1_5()){			
-			echo "<ul>";
+		if (!self::isJoomla1_5()){	
+
+			?>
+			
+			<style type="text/css">
+				.jolomeasubmenu li {display:inline;margin : 0px 10px; border : 1px solid black; padding:10px;}
+			</style>
+			
+			<?php
+		
+			echo "<ul class='jolomeasubmenu'>";
 			foreach(self::$subMenu as $entry){
 				echo "<li>";
 				if (!$entry['selected']){
@@ -113,12 +137,36 @@ class JoomlaCompatibilityHelper{
 		}
 	}
 	
+	public static function loadMootools(){
+		if (self::isJoomla1_5()){
+			JHTML::_('behavior.mootools');			
+		}else {
+			global $mainframe;
+			//Mootols is not installed on a fresh Joomla 1.0 installation.
+			$mainframe->addCustomHeadTag('<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.11/mootools-yui-compressed.js"></script>');
+		}
+	}
+	
 	public static function __($key){
 		if (self::isJoomla1_5()){
 			return JText::_($key);
 		} else {
-			return $key;
+			//English only for Joomla 1.0.
+			return ucfirst(strtolower($key));							
 		}
+	}
+	
+	public static function getIndexPage(){
+		return 'index'.(JoomlaCompatibilityHelper::isJoomla1_0()?"2":"").'.php';
+	}
+	
+	public static function getDatabaseObject(){
+		if (self::isJoomla1_0()){	
+			global $database;
+			return $database;
+		} else {
+			return JFactory::getDBO();
+		}		
 	}
 	
 }

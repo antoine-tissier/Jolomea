@@ -12,17 +12,19 @@ class TOOLBAR_jolomea
 {
 	function _DEFAULT()
 	{				
+	
 		JoomlaCompatibilityHelper::setTitle(JoomlaCompatibilityHelper::__( 'Jolomea' ), 'langmanager.png' );
 		JoomlaCompatibilityHelper::addToolbarIcon("search", "preview", "preview", "search");
 		JoomlaCompatibilityHelper::addToolbarIcon("help", "help", "help", "help");
+				
 	}
 	
-	function _EDIT($jolomea=true){
+	function _EDIT($jolomea=true){	
 		if ($jolomea){
 			JoomlaCompatibilityHelper::addToolbarIcon("shareTranslationFile", "send.png", "send.png", JoomlaCompatibilityHelper::__("SAVE AND SHARE"));
 		}
 	
 		JoomlaCompatibilityHelper::addToolbarIcon("saveTranslationFile", "save.png", "save.png", "save");
-		JoomlaCompatibilityHelper::addToolbarBackButton();
+		JoomlaCompatibilityHelper::addToolbarBackButton();		
 	}
 }

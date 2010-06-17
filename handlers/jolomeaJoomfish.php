@@ -32,7 +32,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 	}
 	
 	public function index(){
-		$database					=& JFactory::getDBO();
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
 		$database->setQuery("SHOW INDEX FROM #__jf_content WHERE key_name='value_full_text'");
 		if (!$database->loadResult()){
 			$database->setQuery('ALTER TABLE `#__jf_content` ADD FULLTEXT `value_full_text` (`value`);');
@@ -41,16 +41,24 @@ class jolomeaJoomfish extends jolomeaHandler{
 	}
 	
 	public function getLanguageByCode($langue){
-		$database					=& JFactory::getDBO();
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
 		$database->setQuery("SELECT * from #__languages where code=".$database->Quote($langue));
 		$language  = $database->loadObject();
 		return $language;
 	}
 	
 	public function getDefaultLanguage(){				
-		$params = JComponentHelper::getParams('com_languages');
-		$langue = $params->get("site", 'en-GB');		
-		return self::getLanguageByCode($langue);		
+		$language = null;
+		if (JoomlaCompatibilityHelper::isJoomla1_5()){
+			$params = JComponentHelper::getParams('com_languages');
+			$langue = $params->get("site", 'en-GB');		
+			$language = self::getLanguageByCode($langue);		
+		} else {
+			$database = &JoomlaCompatibilityHelper::getDatabaseObject();
+			$database->setQuery("SELECT * from #__languages where active=1 order by ordering limit 1");
+			$database->loadObject($language);
+		}
+		return $language;
 	}
 	
 	public function search($keyword, $language_target, $language_source){		
@@ -101,7 +109,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 		$defaultLanguage = $this->getDefaultLanguage();
 		
-		$database					=& JFactory::getDBO();
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
 		
 		$object = simplexml_load_file($_SERVER['DOCUMENT_ROOT']."/administrator/components/com_joomfish/contentelements/".$file.".xml");
 		
@@ -162,7 +170,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 		
 		$user =& JFactory::getUser();				
 		
-		$database					=& JFactory::getDBO();		
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
 				
 		$language_id = self::getLanguageByCode($language);
 		$language_id = $language_id->id;				
@@ -263,8 +271,9 @@ class jolomeaJoomfish extends jolomeaHandler{
 	public function filenameToTranslationGroup($filename){
 	}
 	
-	public function getAvailableLanguages(){
-		$database					=& JFactory::getDBO();
+	public function getAvailableLanguages(){				
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
+		
 		$getAvailableLanguages = array();
 		$database->setQuery('SELECT id, code from #__languages');
 	
@@ -283,7 +292,7 @@ class jolomeaJoomfish extends jolomeaHandler{
 	}
 	
 	public function getAvailableTranslationData($language){	
-		$database					=& JFactory::getDBO();
+		$database = &JoomlaCompatibilityHelper::getDatabaseObject();
 		$getAvailableTranslationData = array();
 		$database->setQuery("select joomlatablename from #__jf_tableinfo");
 		foreach ($database->loadObjectList() as $v){

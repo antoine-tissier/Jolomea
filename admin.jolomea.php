@@ -150,9 +150,9 @@ if (class_exists($handler)){
 						file_get_contents($jolomea_translation_handler->translationGroupToFilename($translation_group, $language_target)), 
 						false);
 				}
-				$mainframe->redirect('index.php?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'OK');
+				$mainframe->redirect(JoomlaCompatibilityHelper::getIndexPage().'?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'OK');
 			} else {
-				$mainframe->redirect('index.php?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'Err');
+				$mainframe->redirect(JoomlaCompatibilityHelper::getIndexPage().'?option=com_jolomea&handler='.$handler.'&task=editTranslationGroup&translation_group='.$translation_group.'&language_source='.$language_source.'&language_target='.$language_target,'Err');
 			}
 			break;
 			
@@ -264,7 +264,7 @@ if (class_exists($handler)){
 				}
 				
 				if (empty($message)){
-					$mainframe->redirect('index.php?option=com_jolomea&handler='.$handler.'&translation_group='.$translation_group.'&language=source='.$language_source.'&language_target='.$language_target.'&task=editTranslationGroup');
+					$mainframe->redirect(JoomlaCompatibilityHelper::getIndexPage().'?option=com_jolomea&handler='.$handler.'&translation_group='.$translation_group.'&language=source='.$language_source.'&language_target='.$language_target.'&task=editTranslationGroup');
 					die();
 				} 								
 			}

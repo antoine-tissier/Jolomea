@@ -11,6 +11,8 @@ defined( '_JEXEC' ) or defined( '_VALID_MOS' ) or die( 'Restricted access' );
 
 require_once "toolbar.jolomea.html.php";
 
+JoomlaCompatibilityHelper::toolbartStart();
+
 switch ($task)
 {
 	case "editTranslationGroup":
@@ -21,3 +23,5 @@ switch ($task)
 		TOOLBAR_jolomea::_DEFAULT();
 		break;
 }
+
+JoomlaCompatibilityHelper::toolbartEnd();
