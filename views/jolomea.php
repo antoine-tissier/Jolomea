@@ -210,7 +210,7 @@ class JolomeaViewJolomea{
 				
 				</ul>
 				
-				</div><?
+				</div><?php
 			}
 		?><br style="clear:both"/></div>
 	<?php
